@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" th:remove="tag">
+<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+<script th:src="@{/js/dialog.js}" defer="defer"></script>
+
+</head>
+<body>
+
+	<!-- コンテンツの表示 -->
+	<div layout:fragment="content">
+		<main class="offcanvas-outside bg-light">
+			<div class="container-fluid">
+				<!-- トグルボタン -->
+				<div th:replace="~{fragments/sidebar :: toggler}">
+					
+				</div>
+				
+				<h1 th:text=${title}></h1>
+				<div class="row">
+					<div class="col-md-2">
+					
+					<form th:action="@{/}" th:object="${attendance}" method="post" novalidate>
+						
+						<table class="table">
+							<tr>
+								<td><label for="workDay">出勤日:</label></td>
+								<td><input id="date" name="workDay" type="date" th:value="${workDay}" autocomplete="on" th:errorclass="is-invalid"></td>
+								<td><div class="invalid-feedback" th:errors="*{workDay}"></div></td>
+							</tr>
+							
+							<tr>
+								<td><label for="workStart">出勤時間:</label></td>
+								<td><input id="workStart" name="workStart" type="time" th:value="*{workDay}" th:errorclass="is-invalid"></td>
+								<td><div class="invalid-feedback" th:errors="*{workStart}"></div></td>
+							</tr>
+							<tr>
+								<td><label for="workFinish">退勤時間:</label></td>
+								<td><input id="workFinish" name="workFinish" type="time" th:value="*{workFinish}" th:errorclass="is-invalid"></td>
+								<td><div class="invalid-feedback" th:errors="*{workFinish}"></div></td>
+							</tr>
+							<tr>
+								<td><input type="submit" value="登録" class="mb-3 btn btn-sm btn-outline-secondary"/></td>
+							</tr>
+						</table>
+					</form>	
+				</div>
+				
+				<div class="row">
+					<div class="col-md-4">
+						<table>
+						<thead>
+							<tr>
+								
+								<th>部署名</th>
+								<th>氏名</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+							
+								<td th:text="${departments}">部署名</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					
+					</div>
+					
+				</div>		
+					
+				<div class="row">	
+					
+						<div class="card shadow">
+							<div class="card header">
+								<h6 class="text-navy my-2">
+									勤怠一覧
+								</h6>
+							</div>
+							<div class="card-body">
+								<div th:if="${attendances.size() == 0}">
+									該当データがありません
+								</div>
+								
+								<table th:if="${attendances.size() > 0}"
+								class="table table-bordered">
+									<thead>
+										<tr>
+											<th>出勤日</th>
+											<th>出勤時間</th>
+											<th>退勤時間</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="attendance : ${attendances}">
+											<td>[[${attendance.workDay}]]</td>
+											<td>[[${attendance.workStart}]]</td>
+											<td>[[${attendance.workFinish}]]</td>
+											<td>
+											<a th:href="@{/edit/{id}(id=*{attendance.id})}" class="btn btn-primary">
+											<i class="bi bi-pencil-square"></i>
+											編集
+											</a>
+											
+											<a th:href="@{/delete/{id}(id=*{attendance.id})}" class="btn btn-danger">
+											<i class="bi bi-trash-fill"></i>
+											削除
+											</a>
+											
+										    </td>
+										</tr>
+										
+									</tbody>
+								</table>
+							</div>
+						</div>
+					    
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+</body>
+</html>
