@@ -18,6 +18,7 @@ import com.example.demo.repository.DepartmentRepository;
 @Controller
 public class AttendanceController {
 	
+	
 	private final AttendanceRepository repository;
 	private final DepartmentRepository departmentRepository;
 	
